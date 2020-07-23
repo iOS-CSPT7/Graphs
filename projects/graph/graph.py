@@ -129,6 +129,27 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
+        visited = set()
+
+        q = Queue()
+
+        q.enqueue([starting_vertex])
+
+        while q.size() > 0:
+            v = q.dequeue()
+            last = v[-1]
+
+            if last in visited: 
+                continue 
+            else: 
+                visited.add(last)
+            for neighbor in self.get_neighbors(last):
+                next_path = v.copy()
+                next_path.append(neighbor)
+
+                if neighbor == destination_vertex: 
+                    return next_path
+                q.enqueue(nex)
         pass  # TODO
 
     def dfs(self, starting_vertex, destination_vertex):
@@ -137,6 +158,27 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
+        visited = set()
+
+        s = Stack()
+
+        s.push([starting_vertex])
+
+        while s.size() > 0:
+            v = s.pop()
+            last = v[-1]
+
+            if last in visited: 
+                continue 
+            else: 
+                visited.add(last)
+            for neighbor in self.get_neighbors(last):
+                next_path = v.copy()
+                next_path.append(neighbor)
+                if neighbor == destination_vertex:
+                    return next_path
+                s.push(next_path)
+        
         pass  # TODO
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
@@ -147,6 +189,27 @@ class Graph:
 
         This should be done using recursion.
         """
+        visited = set()
+
+        def dft(path):
+            last = path[-1]
+            if last in visited: 
+                return None 
+
+            else: 
+                visited.add(last)
+            if last == destination_vertex:
+                return path
+            for neighbor in self.get_neighbors(last):
+                next_path = path.copy()
+                next_path.append(neighbor)
+
+                found = dft(next_path)
+
+                if found: 
+                    return found 
+            return None
+        return dft([starting_vertex])
         pass  # TODO
 
 if __name__ == '__main__':
