@@ -45,6 +45,31 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for user in range(num_users):
+            self.add_user(user)
+            # starts at 1, up to and including num_users
+
+        # hint 1: to create n random friendships, 
+        # you could create a list with all possible friendship combos 
+
+        num_users = 5 
+        friendship_combinations = []
+
+        # On^2
+        for user in range(1, self.last_id + 1):
+            for friend in range(user + 1, self.last_id + 1):
+                friendship_combinations.append((user, friend))
+
+        self.fisher_yates_shuffles(friendship_combinations)
+
+        # take as many
+        # then grab the first N elements from the list 
+        total_friendships = num_users * avg_friendships
+
+        friends_to_make = friendship_combinations[:(total_friendships // 2) ]
+
+        for friendship in friends_to_make:
+            self.add_friendship(friendship[0], friendship[1])
 
         # Create friendships
 
