@@ -229,7 +229,7 @@ class Graph:
         
         pass  # TODO
 
-    # def dfs_recursive(self, starting_vertex, destination_vertex):
+    def dfs_recursive(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -237,51 +237,52 @@ class Graph:
 
         This should be done using recursion.
         """
-        # visited = set()
+        visited = set()
 
-        # def dft(path):
-        #     last = path[-1]
-        #     if last in visited: 
-        #         return None 
+        def dft(path):
+            last = path[-1]
+            if last in visited: 
+                return None 
 
-        #     else: 
-        #         visited.add(last)
-        #     if last == destination_vertex:
-        #         return path
-        #     for neighbor in self.get_neighbors(last):
-        #         next_path = path.copy()
-        #         next_path.append(neighbor)
+            else: 
+                visited.add(last)
+            if last == destination_vertex:
+                return path
+            for neighbor in self.get_neighbors(last):
+                next_path = path.copy()
+                next_path.append(neighbor)
 
-        #         found = dft(next_path)
+                found = dft(next_path)
 
-        #         if found: 
-        #             return found 
-        #     return None
-        # return dft([starting_vertex])
+                if found: 
+                    return found 
+            return None
+        return dft([starting_vertex])
 
         # Tims' : 
-    def dfs_recursive(self, starting_vertex, path = [], destination_vertex,  visited = None):
-        if visited == None: 
-            visited = set()
+    
+    # def dfs_recursive(self, starting_vertex, path = [], destination_vertex,  visited = None):
+    #     if visited == None: 
+    #         visited = set()
 
-        if starting_vertex not in visited: 
-            visited.add(starting_vertex)
+    #     if starting_vertex not in visited: 
+    #         visited.add(starting_vertex)
 
-        if len(path) == 0:
-            path.append(starting_vertex)
+    #     if len(path) == 0:
+    #         path.append(starting_vertex)
 
-        if starting_vertex == destination_vertex: 
-            return path 
+    #     if starting_vertex == destination_vertex: 
+    #         return path 
 
-        neighbors = self.get_neighbors(starting_vertex)
+    #     neighbors = self.get_neighbors(starting_vertex)
 
-        for neighbor in neighbors:
-            if neighbor not in visited: 
-                # recurse
-                result = self.dfs_recursive(neighbor, path + [neighbor], destination_vertex,  visited)
-                if result is not None: 
-                    return result 
-        return None
+    #     for neighbor in neighbors:
+    #         if neighbor not in visited: 
+    #             # recurse
+    #             result = self.dfs_recursive(neighbor, path + [neighbor], destination_vertex,  visited)
+    #             if result is not None: 
+    #                 return result 
+    #     return None
  
 
 if __name__ == '__main__':
