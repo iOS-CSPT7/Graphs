@@ -1,3 +1,9 @@
+
+import random 
+# from random import randit 
+
+import collections
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -66,7 +72,7 @@ class SocialGraph:
             for friend in range(user + 1, self.last_id + 1):
                 friendship_combinations.append((user, friend))
 
-        self.fisher_yates_shuffles(friendship_combinations)
+        self.fisher_yates_shuffle(friendship_combinations)
 
         # take as many
         # then grab the first N elements from the list 
@@ -90,6 +96,37 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+
+        path_queue = collections.deque()
+
+        path_queue.append([user_id])
+
+        while len(path_queue) > 0:
+            path = path_queue.popleft()
+
+            friend_id = path[-1]
+            if friend_id in visited: 
+                continue 
+
+            visited[friend_id] = path 
+
+
+            for id in self.friendships[friend_id]:
+                new_path = path.copy()
+                new_path.append(id)
+                path_queue.append(new_path)
+
+        friend_coverage = (len(visited) - 1) / (len(self.users) -1 )
+
+        total_length = 0
+
+        for path in visited.values():
+            total_length += len(path) - 1
+
+        if len(visited) > 1: 
+            avg_separation = total_length / (len(visited) -1)
+        else: 
+            print("no friends")
         return visited
 
 
