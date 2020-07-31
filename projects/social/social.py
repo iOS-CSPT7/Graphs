@@ -1,6 +1,7 @@
 
 import random 
 import collections
+import time 
 # from random import randit 
 class Queue():
     def __init__(self):
@@ -31,12 +32,15 @@ class SocialGraph:
         Creates a bi-directional friendship
         """
         if user_id == friend_id:
-            print("WARNING: You cannot be friends with yourself")
+            # print("WARNING: You cannot be friends with yourself")
+            return False
         elif friend_id in self.friendships[user_id] or user_id in self.friendships[friend_id]:
-            print("WARNING: Friendship already exists")
+            # print("WARNING: Friendship already exists")
+            return False 
         else:
             self.friendships[user_id].add(friend_id)
             self.friendships[friend_id].add(user_id)
+            return True 
 
     def add_user(self, name):
         """
@@ -76,7 +80,7 @@ class SocialGraph:
         # hint 1: to create n random friendships, 
         # you could create a list with all possible friendship combos 
 
-        num_users = 5 
+        # num_users = 5 
         friendship_combinations = []
 
         # On^2
@@ -99,12 +103,19 @@ class SocialGraph:
     # if you are in the same bucket of the hash table, you are friends
 
     def populate_graph_linear(self, num_users, avg_friendships):
+        self.last_id = 0 
+        self.users = {}
+        self.friendships = {} 
+
+        for user in range(num_users):
+            self.add_user(user)
+
         total_friendships = num_users * avg_friendships
         friendships_made = 0 
 
 
         while friendships_made < total_friendships:
-            friend = random.randint(1, self.last_id)
+            user = random.randint(1, self.last_id)
             friend = random.randint(1, self.last_id)
 
             was_friendships_made = self.add_friendship(user, friend)
@@ -183,10 +194,19 @@ class SocialGraph:
 if __name__ == '__main__':
     sg = SocialGraph()
     # sg.populate_graph(10, 2)
-    sg.populate_graph(1000, 5)
-    print(sg.friendships)
+    start_time = time.time()
+    sg.populate_graph(1000, 50)
+    end_time = time.time()
+
+    print(end_time - start_time)
+
+
+
+    start_time = time.time()
+    sg.populate_graph_linear(1000, 50)
+    end_time = time.time()
+    print(end_time - start_time)
     connections = sg.get_all_social_paths(1)
-    print(connections)
 
     # percentage of users in this user's extended social network 
     print("percebtage of users in this user's social network:" , len(connections)/ 1000 * 100) 
