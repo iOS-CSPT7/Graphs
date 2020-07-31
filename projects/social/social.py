@@ -1,8 +1,20 @@
 
 import random 
-# from random import randit 
-
 import collections
+# from random import randit 
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
 
 class User:
     def __init__(self, name):
@@ -79,11 +91,27 @@ class SocialGraph:
         total_friendships = num_users * avg_friendships
 
         friends_to_make = friendship_combinations[:(total_friendships // 2) ]
-
+         # Create friendships
         for friendship in friends_to_make:
             self.add_friendship(friendship[0], friendship[1])
 
-        # Create friendships
+    # hash the user name or something 
+    # if you are in the same bucket of the hash table, you are friends
+
+    def populate_graph_linear(self, num_users, avg_friendships):
+        total_friendships = num_users * avg_friendships
+        friendships_made = 0 
+
+
+        while friendships_made < total_friendships:
+            friend = random.randint(1, self.last_id)
+            friend = random.randint(1, self.last_id)
+
+            was_friendships_made = self.add_friendship(user, friend)
+
+            if was_friendships_made:
+                friendships_made += 1
+       
 
     def get_all_social_paths(self, user_id):
         """
@@ -94,45 +122,80 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
-        visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        # visited = {}  # Note that this is a dictionary, not a set
+        # # !!!! IMPLEMENT ME
 
-        path_queue = collections.deque()
+        # path_queue = collections.deque()
 
-        path_queue.append([user_id])
+        # path_queue.append([user_id])
 
-        while len(path_queue) > 0:
-            path = path_queue.popleft()
+        # while len(path_queue) > 0:
+        #     path = path_queue.popleft()
 
-            friend_id = path[-1]
-            if friend_id in visited: 
-                continue 
+        #     friend_id = path[-1]
+        #     if friend_id in visited: 
+        #         continue 
 
-            visited[friend_id] = path 
+        #     visited[friend_id] = path 
 
 
-            for id in self.friendships[friend_id]:
-                new_path = path.copy()
-                new_path.append(id)
-                path_queue.append(new_path)
+        #     for id in self.friendships[friend_id]:
+        #         new_path = path.copy()
+        #         new_path.append(id)
+        #         path_queue.append(new_path)
 
-        friend_coverage = (len(visited) - 1) / (len(self.users) -1 )
+        # friend_coverage = (len(visited) - 1) / (len(self.users) -1 )
 
-        total_length = 0
+        # total_length = 0
 
-        for path in visited.values():
-            total_length += len(path) - 1
+        # for path in visited.values():
+        #     total_length += len(path) - 1
 
-        if len(visited) > 1: 
-            avg_separation = total_length / (len(visited) -1)
-        else: 
-            print("no friends")
-        return visited
+        # if len(visited) > 1: 
+        #     avg_separation = total_length / (len(visited) -1)
+        # else: 
+        #     print("no friends")
+        # return visited
+        # Tims
+        visited = {}
+
+        q = Queue()
+        q.enqueue([user_id])
+
+        while q.size() > 0: 
+            current_path = q.dequeue()
+            current_node = current_path[-1]
+
+            if current_node not in visited:
+                visited[current_node] = current_path 
+                friends = self.friendships[current_node]
+
+                for friend in friends: 
+                    friend_path = current_path.copy()
+                    friend_path.append(friend)
+
+                    q.enqueue(friend_path)
+
+            
+        return visited 
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(10, 2)
+    # sg.populate_graph(10, 2)
+    sg.populate_graph(1000, 5)
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
+
+    # percentage of users in this user's extended social network 
+    print("percebtage of users in this user's social network:" , len(connections)/ 1000 * 100) 
+
+    # average  degree of separation 
+    # aka how many people do i need to introduce ? 
+    total = 0
+    for path in connections.values():
+        total += len(path)
+    average = total / len(connections)
+
+    print("average degree of separation: ", average)
